@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sjCarousel.css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="sjCarousel.js"></script>
+    <script type="text/javascript">
+        var sjc;
+        window.onload = function(){
+            sjc = new sjCarousel(1,2,50,50);
+            var imgs = new Array('/sjCarousel/img/1.jpg', '/sjCarousel/img/2.jpg','/sjCarousel/img/3.jpg');
+            var res = sjc.init(imgs, 'wrap');
+            if(!res) {
+                alert('error in init');
+            }
+
+            /*$('#x').click(function() {
+              $(this).animate(
+                { left:50 }, {
+                 duration: 'slow',
+                 easing: 'easeOutElastic'
+                });
+             });*/
+            $('.x').click(function() {
+              $(this).animate({left:50}, {queue:false, duration:450}, 'slow');
+             });
+        }
+    </script>
+  </head>
+  <body>
+      <div id="wrap"></div>
+      <br/><br/><br><br>
+  </body>
+</html>

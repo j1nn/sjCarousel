@@ -1,0 +1,29 @@
+.sjCarousel {
+    list-style-type: none;
+    position: absolute;
+    left: 0px;
+}
+.sjCarousel li {
+    float: left;
+}
+.sjCarousel img {
+    /*display: none;*/
+}
+.sjCarousel .visible {
+    display: block;
+}
+#sjBack {
+    cursor: pointer;
+    float: left;
+}
+#sjForward {
+    cursor: pointer;
+    position: absolute;
+    left: 210px;
+}
+.sjActive {
+    color: black;
+}
+.sjInactive {
+    color: #bbb;
+}
