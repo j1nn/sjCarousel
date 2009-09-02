@@ -1,9 +1,13 @@
-.sjCarousel {
-    list-style-type: none;
-    position: absolute;
-    left: 0px;
+.sjcWrapper {
 }
-.sjCarousel li {
+.sjCarousel {
+    left: 0px;
+    position: absolute;
+}
+.sjcWrapper {
+    position: absolute;
+}
+.sjItem {
     float: left;
 }
 .sjCarousel img {

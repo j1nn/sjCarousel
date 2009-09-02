@@ -16,16 +16,19 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         if(this.items.length < this.itemsShow){
             return false;
         }
-        $('#' + wrapperId).append('<div id="sjBack" class="sjInactive"><<</div>');
+        $('#' + wrapperId).append('<div id="sjBack" class="sjInactive"><<</div><br/>');
         var li;
-        $('#' + wrapperId).append('<ul class="sjCarousel"></ul>');
+        $('#' + wrapperId).append('<div class="sjcWrapper"></div>');
+        $('.sjcWrapper').css('clip','rect(0px,' + (this.iw * this.itemsShow) + 'px,' + (this.ih + 1) + 'px,0px)');
+        $('.sjcWrapper').append('<div class="sjCarousel"></div>');
+        $('.sjCarousel').css({'width':(this.iw * this.items.length + 10) + 'px',
+                                'height' : this.ih + 'px'
+                            });
         this.el = $('.sjCarousel');
-        this.el.css('clip','rect(0px,' + (this.iw * this.itemsShow + 41) + 'px,' + this.ih + 'px,40px)');//TODO 41/40 - offset of li in ul
-        
         for(var i in this.items){
-            li = '<li id="li' + (parseInt(i) + 1) + '"><img src="' + this.items[i] +
+            li = '<div id="li' + (parseInt(i) + 1) + '" class="sjItem"><img src="' + this.items[i] +
                     '" alt="i' + (parseInt(i) + 1) + '" width="' + this.iw +
-                    '" height="' + this.ih + '" id="i' + (parseInt(i) + 1) + '"/></li>';
+                    '" height="' + this.ih + '" id="i' + (parseInt(i) + 1) + '"/></div>';
             $('.sjCarousel').append(li);
         }
         $('#' + wrapperId).append('<div id="sjForward" class="sjInactive">>></div>');
@@ -68,13 +71,13 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             return;
         }
         var self = this;
-        var left = parseInt(this.el.offset().left);
+       // var left = parseInt(this.el.offset().left);
         this.el.animate(
                 { left: -1 * self.iw }, {
                  duration: 2500,
                  easing: 'easeOutElastic',
                  complete: function(){
-                    self.el.css('left', left + 'px');
+                    self.el.css('left', '0px');//todo probably left?
                     var item = $('#li' + (self.curFirst - 1)).remove();
                     self.el.append(item);
                 }}
@@ -88,12 +91,12 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             return;
         }
         var self = this;
-        var left = parseInt(this.el.offset().left);
-        self.el.css('left', (left - parseInt(this.iw)) + 'px');
         var item = $('#li' + (self.curFirst - 1)).remove();
-        self.el.prepend(item);
+        this.el.css('left', (0 + -1 * this.iw) + 'px');//todo probably left?
+        this.el.prepend(item);
+
         this.el.animate(
-                { left: left }, {
+                { left: 0 }, {
                  duration: 2500,
                  easing: 'easeOutElastic'
                 }
