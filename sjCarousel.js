@@ -6,7 +6,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.ih = h;
     this.el = null;
 
-    this.init = function(items, wrapperId){
+    this.init = function(items, wrapperId) {
         if(this.itemsScroll <= 0 || this.itemsShow <= 0 || $('#' + wrapperId).html() == null){
             return false;
         }
@@ -16,26 +16,32 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         if(this.items.length < this.itemsShow){
             return false;
         }
-        $('#' + wrapperId).append('<div id="sjBack" class="sjInactive"><<</div><br/>');
-        var li;
-        $('#' + wrapperId).append('<div class="sjcWrapper"></div>');
-        $('.sjcWrapper').css('clip','rect(0px,' + (this.iw * this.itemsShow) + 'px,' + (this.ih + 1) + 'px,0px)');
+        $('#' + wrapperId).append('<div class="sjCarouselMain"></div>');
+        $('.sjCarouselMain').append('<div id="sjBack" class="sjInactive"><<</div>');
+        $('.sjCarouselMain').append('<div class="sjcWrapper"></div>');
+        $('.sjcWrapper').css({'clip':'rect(0px,' + (this.iw * this.itemsShow + 1) + 'px,' + (this.ih + 1) + 'px,0px)',
+                            'margin-left' : $('#sjBack').width() + 'px'});
+        
         $('.sjcWrapper').append('<div class="sjCarousel"></div>');
         $('.sjCarousel').css({'width':(this.iw * this.items.length + 10) + 'px',
                                 'height' : this.ih + 'px'
                             });
         this.el = $('.sjCarousel');
+        var li;
         for(var i in this.items){
             li = '<div id="li' + (parseInt(i) + 1) + '" class="sjItem"><img src="' + this.items[i] +
                     '" alt="i' + (parseInt(i) + 1) + '" width="' + this.iw +
                     '" height="' + this.ih + '" id="i' + (parseInt(i) + 1) + '"/></div>';
             $('.sjCarousel').append(li);
         }
-        $('#' + wrapperId).append('<div id="sjForward" class="sjInactive">>></div>');
+        $('.sjCarouselMain').append('<div id="sjForward" class="sjInactive">>></div>');
+        $('#sjForward').css('margin-left', 
+        (parseInt($('.sjcWrapper').css('margin-left')) + this.iw * this.itemsShow - $('#sjBack').width()) + 'px');
         if(this.items.length > this.itemsShow){
             this.enableForward();
         }
         //this.show();
+
         return true;
     }
 
@@ -74,7 +80,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
        // var left = parseInt(this.el.offset().left);
         this.el.animate(
                 { left: -1 * self.iw }, {
-                 duration: 2500,
+                 duration: 2000,
                  easing: 'easeOutElastic',
                  complete: function(){
                     self.el.css('left', '0px');//todo probably left?
@@ -97,7 +103,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
 
         this.el.animate(
                 { left: 0 }, {
-                 duration: 2500,
+                 duration: 2000,
                  easing: 'easeOutElastic'
                 }
          );

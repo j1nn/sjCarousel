@@ -1,10 +1,8 @@
 .sjcWrapper {
+    position: absolute;
 }
 .sjCarousel {
     left: 0px;
-    position: absolute;
-}
-.sjcWrapper {
     position: absolute;
 }
 .sjItem {
@@ -18,12 +16,14 @@
 }
 #sjBack {
     cursor: pointer;
+    clear: both;
     float: left;
 }
 #sjForward {
     cursor: pointer;
-    position: absolute;
-    left: 210px;
+    /*position: absolute;
+    left: 210px;*/
+    float: left;
 }
 .sjActive {
     color: black;
