@@ -16,22 +16,11 @@
             if(!res) {
                 alert('error in init');
             }
-
-            /*$('#x').click(function() {
-              $(this).animate(
-                { left:50 }, {
-                 duration: 'slow',
-                 easing: 'easeOutElastic'
-                });
-             });*/
-            $('.x').click(function() {
-              $(this).animate({left:50}, {queue:false, duration:450}, 'slow');
-             });
         }
     </script>
   </head>
   <body>
-      <div id="wrap"></div>
+      <div id="wrap" style="position:absolute;top:100px;left:50px;"></div>
       <br/><br/><br><br>
   </body>
 </html>
