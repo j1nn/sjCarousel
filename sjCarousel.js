@@ -76,7 +76,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
 
     //scroll the carousel s.t. given element will become visible
     this.scroll = function(i){
-        if(i >= this.curFirst && i<= (this.curFirst + this.itemsShow - 1)) {
+        if((i >= this.curFirst && i<= (this.curFirst + this.itemsShow - 1)) || i > this.items.length) {
             return;
         }
         if(i < this.curFirst){
