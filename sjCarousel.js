@@ -146,7 +146,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
          );
     }
 
-    this.redraw = function(start, effects){
+    this.redraw = function(start, effects){//todo: effects used?
         var end = start + this.itemsShow - 1;
         for(var i = start; i < end; ++i){
             this.items[i] = this.items[i+1];
