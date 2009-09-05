@@ -2,6 +2,13 @@
 <html>
   <head>
     <title></title>
+    <style type="text/css">
+        .testlink {
+            cursor: pointer;
+            text-decoration: underline;
+            display: block;
+        }
+    </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="sjCarousel.css" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
@@ -11,8 +18,7 @@
         var sjc;
         window.onload = function(){
             sjc = new sjCarousel(1,2,50,50);
-            var imgs = new Array('/sjCarousel/img/1.jpg', '/sjCarousel/img/2.jpg',
-                                            '/sjCarousel/img/3.jpg','/sjCarousel/img/4.jpg');
+            var imgs = new Array('img/1.jpg', 'img/2.jpg','img/3.jpg','img/4.jpg', 'img/5.jpg');
             var res = sjc.init(imgs, 'wrap');
             if(!res) {
                 alert('error in init');
@@ -22,6 +28,10 @@
   </head>
   <body>
       <div id="wrap" style="position:absolute;top:100px;left:50px;"></div>
-      <br/><br/><br><br>
+      <p style="position:absolute;top:170px">
+        <span onclick="sjc.scroll(1)" class="testlink">scroll to 1st</span>
+        <span onclick="sjc.scroll(3)" class="testlink">scroll to 3rd</span>
+        <span onclick="sjc.scroll(5)" class="testlink">scroll to 5th</span>
+      </p>
   </body>
 </html>

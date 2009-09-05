@@ -6,7 +6,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.ih = h;
     this.el = null;
 
-    this.duration = 2000;
+    this.duration = 1600;
     this.easingType = 'easeOutElastic';
 
     this.forwardEnabled = false;
@@ -18,7 +18,6 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         }
         this.curFirst = 1;
         this.items = items;
-        this.wrapperId = wrapperId;//TODO used?
         if(this.items.length < this.itemsShow){
             return false;
         }
@@ -53,7 +52,6 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         if(this.items.length > this.itemsShow){
             this.enableForward();
         }
-        //this.show();
 
         return true;
     }
@@ -76,19 +74,33 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         }
     }
 
-    //scroll the carousel s.t. given element will be the last shown
+    //scroll the carousel s.t. given element will become visible
     this.scroll = function(i){
-        if(this.items.length < (i + 1)){
+        if(i >= this.curFirst && i<= (this.curFirst + this.itemsShow - 1)) {
             return;
         }
-        this.curFirst = i - this.itemsShow;
-        this.redraw(this.curFirst, true);
+        if(i < this.curFirst){
+            for(var j = this.curFirst; j > i; --j){
+                this.back();
+            }
+        }
+        else {
+            var scrollTill = i - this.itemsShow;
+            for(j = this.curFirst; j <= scrollTill; ++j){
+                this.forward();
+            }
+        }
     }
 
     this.forward = function(){
         if(!this.forwardEnabled || this.curFirst + this.itemsScroll >= this.items.length){
             return;
         }
+        //lock
+        this.disableForward();
+        this.disableBack();
+        
+        this.curFirst += this.itemsScroll;
         var self = this;
         var left = parseInt(this.el.css('left'));
         this.el.animate(
@@ -97,29 +109,35 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                  easing: this.easingType,
                  complete: function(){
                     self.el.css('left', left + 'px');
-                    var item = $('#li' + (self.curFirst - 1)).remove();//TODO itemsScroll instd 1
+                    var item = $('#li' + (self.curFirst - self.itemsScroll)).remove();
                     self.el.append(item);
+                    self.redraw(self.curFirst, true);
                 }}
-         );
-        this.curFirst += this.itemsScroll;
-        this.redraw(this.curFirst, true);
+         );      
     }
 
     this.back = function(){
         if(!this.backEnabled || this.curFirst <= 1){
             return;
         }
+        //lock
+        this.disableForward();
+        this.disableBack();
+
         var item = $('#li' + (this.curFirst - 1)).remove();//TODO itemsScroll instd 1
         this.el.css('left', (parseInt(this.el.css('left')) - this.iw) + 'px');
         this.el.prepend(item);
+        this.curFirst -= this.itemsScroll;
+        var self = this;
         this.el.animate(
                 { left: 0 }, {//it should always be zero, as we want this item to be first
                  duration: this.duration,
-                 easing: this.easingType
+                 easing: this.easingType,
+                 complete: function(){
+                     self.redraw(self.curFirst, true);
+                 }
                 }
          );
-        this.curFirst -= this.itemsScroll;
-        this.redraw(this.curFirst, true);
     }
 
     this.redraw = function(start, effects){
@@ -127,7 +145,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         for(var i = start; i < end; ++i){
             this.items[i] = this.items[i+1];
         }
-        //this.show();
+        
         //enable/disable switchers, when needed
         if(this.curFirst + this.itemsShow > this.items.length){
             this.disableForward();
@@ -142,42 +160,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             this.enableBack();
         }
     }
-
-    this.show = function(){
-        /*$('.sjCarousel').animate(
-                { left:50 }, {
-                 duration: 'slow',
-                 easing: 'easeOutElastic'}
-         );*/
-
-        /*for(var i = 1; i < this.curFirst; ++i){
-            $('#i' + i).animate(
-                { left:50 }, {
-                 duration: 'slow',
-                 easing: 'easeOutElastic'
-                });
-            //$('#i' + i).removeClass('visible');
-        }
-        var end = this.curFirst + this.itemsShow;
-        for(i = this.curFirst; i < end; ++i){
-            //$('#i' + i).addClass('visible');
-            $('#i' + i).animate(
-                { left:50 }, {
-                 duration: 'slow',
-                 easing: 'easeOutElastic'
-                });
-        }
-        var len = this.items.length;
-        for(i = end; i <= len; ++i){
-            $('#i' + i).animate(
-                { left:50 }, {
-                 duration: 'slow',
-                 easing: 'easeOutElastic'
-                });
-            //$('#i' + i).removeClass('visible');
-        }*/
-    }
-
+    
     this.itemAt = function(i){
         return this.items[i + 1];
     }
