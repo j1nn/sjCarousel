@@ -167,17 +167,20 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         }
     }
     
-    /*this.itemAt = function(i){
-        return this.items[i + 1];
-    }*/
-    /*this.getIndex = function(url){
+    this.itemAt = function(i){
+        if(i <= 0 || i > this.items.length){
+            return null;
+        }
+        return this.items[i - 1];
+    }
+    this.getIndex = function(url){
         for(var i in this.items){
             if(this.items[i] == url){
-                return i + 1;
+                return parseInt(i) + 1;
             }
         }
         return -1;
-    }*/
+    }
 
     this.disableForward = function(){
         this.forwardEnabled = false;
