@@ -11,7 +11,8 @@
         var sjc;
         window.onload = function(){
             sjc = new sjCarousel(1,2,50,50);
-            var imgs = new Array('/sjCarousel/img/1.jpg', '/sjCarousel/img/2.jpg','/sjCarousel/img/3.jpg');
+            var imgs = new Array('/sjCarousel/img/1.jpg', '/sjCarousel/img/2.jpg',
+                                            '/sjCarousel/img/3.jpg','/sjCarousel/img/4.jpg');
             var res = sjc.init(imgs, 'wrap');
             if(!res) {
                 alert('error in init');

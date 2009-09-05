@@ -6,6 +6,12 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.ih = h;
     this.el = null;
 
+    this.duration = 2000;
+    this.easingType = 'easeOutElastic';
+
+    this.forwardEnabled = false;
+    this.backEnabled = false;
+
     this.init = function(items, wrapperId) {
         if(this.itemsScroll <= 0 || this.itemsShow <= 0 || $('#' + wrapperId).html() == null){
             return false;
@@ -36,7 +42,14 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         }
         $('.sjCarouselMain').append('<div id="sjForward" class="sjInactive">>></div>');
         $('#sjForward').css('margin-left', 
-        (parseInt($('.sjcWrapper').css('margin-left')) + this.iw * this.itemsShow - $('#sjBack').width()) + 'px');
+            (parseInt($('.sjcWrapper').css('margin-left')) + this.iw * this.itemsShow - $('#sjBack').width()) + 'px');
+        var self = this;
+        $('#sjBack').click(function(){
+            self.back();
+        });
+        $('#sjForward').click(function(){
+            self.forward();
+            });
         if(this.items.length > this.itemsShow){
             this.enableForward();
         }
@@ -73,18 +86,18 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     this.forward = function(){
-        if(this.curFirst + this.itemsScroll >= this.items.length){
+        if(!this.forwardEnabled || this.curFirst + this.itemsScroll >= this.items.length){
             return;
         }
         var self = this;
-       // var left = parseInt(this.el.offset().left);
+        var left = parseInt(this.el.css('left'));
         this.el.animate(
                 { left: -1 * self.iw }, {
-                 duration: 2000,
-                 easing: 'easeOutElastic',
+                 duration: this.duration,
+                 easing: this.easingType,
                  complete: function(){
-                    self.el.css('left', '0px');//todo probably left?
-                    var item = $('#li' + (self.curFirst - 1)).remove();
+                    self.el.css('left', left + 'px');
+                    var item = $('#li' + (self.curFirst - 1)).remove();//TODO itemsScroll instd 1
                     self.el.append(item);
                 }}
          );
@@ -93,18 +106,16 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     this.back = function(){
-        if(this.curFirst <= 1){
+        if(!this.backEnabled || this.curFirst <= 1){
             return;
         }
-        var self = this;
-        var item = $('#li' + (self.curFirst - 1)).remove();
-        this.el.css('left', (0 + -1 * this.iw) + 'px');//todo probably left?
+        var item = $('#li' + (this.curFirst - 1)).remove();//TODO itemsScroll instd 1
+        this.el.css('left', (parseInt(this.el.css('left')) - this.iw) + 'px');
         this.el.prepend(item);
-
         this.el.animate(
-                { left: 0 }, {
-                 duration: 2000,
-                 easing: 'easeOutElastic'
+                { left: 0 }, {//it should always be zero, as we want this item to be first
+                 duration: this.duration,
+                 easing: this.easingType
                 }
          );
         this.curFirst -= this.itemsScroll;
@@ -180,30 +191,24 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     this.disableForward = function(){
+        this.forwardEnabled = false;
         $('#sjForward').removeClass('sjActive');
         $('#sjForward').addClass('sjInactive');
-        $('#sjForward').click(function(){});
     }
     this.enableForward = function(){
+        this.forwardEnabled = true;
         $('#sjForward').removeClass('sjInactive');
         $('#sjForward').addClass('sjActive');
-        var self = this;
-        $('#sjForward').click(function(){
-            self.forward();
-        });
     }
     this.disableBack = function(){
+        this.backEnabled = false;
         $('#sjBack').removeClass('sjActive');
         $('#sjBack').addClass('sjInactive');
-        $('#sjBack').click(function(){});
     }
     this.enableBack = function(){
+        this.backEnabled = true;
         $('#sjBack').removeClass('sjInactive');
-        $('#sjBack').addClass('sjActive');
-        var self = this;
-        $('#sjBack').click(function(){
-            self.back();
-        });
+        $('#sjBack').addClass('sjActive');        
     }
 }
 
