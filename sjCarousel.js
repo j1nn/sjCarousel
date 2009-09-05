@@ -80,10 +80,10 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             return;
         }
         if(i < this.curFirst){
-            this.back(i);
+            this.back(this.curFirst - i);
         }
-        else {
-            this.forward(i);
+        else {//i > this.curFirst
+            this.forward(i - this.curFirst - 1);
         }
     }
 
@@ -107,8 +107,8 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                  easing: this.easingType,
                  complete: function(){
                     self.el.css('left', left + 'px');
-                    for (var i = 0; i < numToScroll; ++i){
-                        var item = $('#li' + (self.curFirst - 1)).remove();
+                    for (var i = numToScroll; i > 0; --i){
+                        var item = $('#li' + (self.curFirst - i)).remove();
                         self.el.append(item);
                     }
                     self.redraw(self.curFirst, true);
@@ -128,8 +128,8 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             numToScroll = this.itemsScroll;
         }
 
-        for (var i = 0; i < numToScroll; ++i){
-            var item = $('#li' + (this.curFirst - 1)).remove();
+        for (var i = 0; i <= numToScroll; ++i){
+            var item = $('#li' + (this.curFirst - i)).remove();
             this.el.css('left', (parseInt(this.el.css('left')) - this.iw) + 'px');
             this.el.prepend(item);
         }
