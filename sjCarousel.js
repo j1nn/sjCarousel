@@ -57,22 +57,22 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     //add given element. if index not specified, append to the end
-    this.add = function(url, index){
+    /*this.add = function(url, index){
         if(index == undefind){
             index = this.items.length;
         }
         this.items[index + 1] = url;
-    }
+    }*/
 
     //remove given element
-    this.remove = function(i){
+    /*this.remove = function(i){
         ++i;
         this.items.splice(i, 1);
         //if this element is visible, redraw
         if(i >= this.curFirst && i <= (this.curFirst + this.itemsShow)){
             this.redraw(i, false);
         }
-    }
+    }*/
 
     //scroll the carousel s.t. given element will become visible
     this.scroll = function(i){
@@ -80,43 +80,43 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             return;
         }
         if(i < this.curFirst){
-            for(var j = this.curFirst; j > i; --j){
-                this.back();
-            }
+            this.back(i);
         }
         else {
-            var scrollTill = i - this.itemsShow;
-            for(j = this.curFirst; j <= scrollTill; ++j){
-                this.forward();
-            }
+            this.forward(i);
         }
     }
 
-    this.forward = function(){
+    this.forward = function(numToScroll){
         if(!this.forwardEnabled || this.curFirst + this.itemsScroll >= this.items.length){
             return;
         }
         //lock
         this.disableForward();
         this.disableBack();
-        
-        this.curFirst += this.itemsScroll;
+
+        if(numToScroll == undefined){
+            numToScroll = this.itemsScroll;
+        }
+        this.curFirst += numToScroll;
         var self = this;
         var left = parseInt(this.el.css('left'));
         this.el.animate(
-                { left: -1 * self.iw }, {
+                { left: -1 * self.iw * numToScroll }, {
                  duration: this.duration,
                  easing: this.easingType,
                  complete: function(){
                     self.el.css('left', left + 'px');
-                    var item = $('#li' + (self.curFirst - self.itemsScroll)).remove();
-                    self.el.append(item);
+                    for (var i = 0; i < numToScroll; ++i){
+                        var item = $('#li' + (self.curFirst - 1)).remove();
+                        self.el.append(item);
+                    }
                     self.redraw(self.curFirst, true);
                 }}
          );      
     }
 
-    this.back = function(){
+    this.back = function(numToScroll){
         if(!this.backEnabled || this.curFirst <= 1){
             return;
         }
@@ -124,10 +124,16 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         this.disableForward();
         this.disableBack();
 
-        var item = $('#li' + (this.curFirst - 1)).remove();//TODO itemsScroll instd 1
-        this.el.css('left', (parseInt(this.el.css('left')) - this.iw) + 'px');
-        this.el.prepend(item);
-        this.curFirst -= this.itemsScroll;
+        if(numToScroll == undefined){
+            numToScroll = this.itemsScroll;
+        }
+
+        for (var i = 0; i < numToScroll; ++i){
+            var item = $('#li' + (this.curFirst - 1)).remove();
+            this.el.css('left', (parseInt(this.el.css('left')) - this.iw) + 'px');
+            this.el.prepend(item);
+        }
+        this.curFirst -= numToScroll;
         var self = this;
         this.el.animate(
                 { left: 0 }, {//it should always be zero, as we want this item to be first
@@ -161,17 +167,17 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         }
     }
     
-    this.itemAt = function(i){
+    /*this.itemAt = function(i){
         return this.items[i + 1];
-    }
-    this.getIndex = function(url){
+    }*/
+    /*this.getIndex = function(url){
         for(var i in this.items){
             if(this.items[i] == url){
                 return i + 1;
             }
         }
         return -1;
-    }
+    }*/
 
     this.disableForward = function(){
         this.forwardEnabled = false;
