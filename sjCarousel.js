@@ -57,12 +57,15 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     //add given element. if index not specified, append to the end
-    /*this.add = function(url, index){
-        if(index == undefind){
+    this.add = function(url, index){
+        if(index == undefined){
             index = this.items.length;
         }
-        this.items[index + 1] = url;
-    }*/
+        this.items[index] = url;
+        this.el.append('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
+                    '" alt="i' + (parseInt(index) + 1) + '" width="' + this.iw +
+                    '" height="' + this.ih + '" id="i' + (parseInt(index) + 1) + '"/></div>');
+    }
 
     //remove given element
     /*this.remove = function(i){
