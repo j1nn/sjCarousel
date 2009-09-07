@@ -6,7 +6,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.ih = h;
     this.el = null;
 
-    this.duration = 1600;
+    this.duration = 1300;
     this.easingType = 'easeOutElastic';
 
     this.forwardEnabled = false;
@@ -28,24 +28,10 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
 
         $('#' + wrapperId).append('<div class="sjCarouselMain"></div>');
         $('.sjCarouselMain').append('<div id="sjBack" class="sjInactive"><<</div>');
-        $('.sjCarouselMain').append('<div class="sjcWrapper"></div>');
-
-        /*var addToMargin = 0;
-        if ($('#sjBack').css('margin-right') != ''){
-            addToMargin = parseInt($('#sjBack').css('margin-right'));
-        }
-        else if($('#sjBack').css('margin') != ''){
-            var parts = $('#sjBack').css('margin').split(' ');
-            if(parts.length > 1){
-                addToMargin = parseInt(parts[1]);
-            }
-            else{
-                addToMargin = parseInt(parts[0]);
-            }
-            alert(addToMargin)
-        }*/
-
-        $('.sjcWrapper').css({'clip':'rect(0px,' + (this.iw * this.itemsShow + 1) + 'px,' + (this.ih + 1) + 'px,0px)',
+        $('.sjCarouselMain').append('<div class="sjcWrapper"></div>');        
+        $('.sjcWrapper').css({'clip':'rect(0px,' + 
+                    (this.iw * this.itemsShow + this.itemsShow * Math.ceil(this.iw / 25) * 2 + 1) + 'px,'
+                    + (this.ih + 1) + 'px,0px)',
                     'margin-left' : ($('#sjBack').width() + parseInt($('#sjBack').css('margin-right')) +
                     parseInt($('#sjBack').css('margin-left'))) + 'px'});
         $('.sjcWrapper').append('<div class="sjCarousel"></div>');
@@ -60,6 +46,9 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                     '" height="' + this.ih + '" id="i' + (parseInt(i) + 1) + '"/></div>';
             $('.sjCarousel').append(li);
         }
+
+        $('.sjItem').css('margin', parseInt(this.iw / 25) + 'px');
+
         $('.sjCarouselMain').append('<div id="sjForward" class="sjInactive">>></div>');
         $('#sjForward').css('margin-left', 
             (parseInt($('.sjcWrapper').css('margin-left')) + this.iw * this.itemsShow - $('#sjBack').width()) + 'px');
@@ -178,7 +167,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         var self = this;
         var left = parseInt(this.el.css('left'));
         this.el.animate(
-                { left: -1 * self.iw * numToScroll }, {
+                { left: -1 * self.iw * numToScroll - numToScroll * Math.ceil(this.iw / 25)}, {
                  duration: this.duration,
                  easing: this.easingType,
                  complete: function(){

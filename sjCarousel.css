@@ -15,11 +15,12 @@
     cursor: pointer;
     clear: both;
     float: left;
-    margin-right: 10px;
+    margin: 10px;
 }
 #sjForward {
     cursor: pointer;
     float: left;
+    margin: 10px;
 }
 .sjActive {
     color: black;
