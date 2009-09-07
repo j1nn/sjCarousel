@@ -12,7 +12,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.forwardEnabled = false;
     this.backEnabled = false;
 
-    this.init = function(items, wrapperId) {
+    this.init = function(items, wrapperId, callback) {
         if(this.itemsScroll <= 0 || this.itemsShow <= 0 || $('#' + wrapperId).html() == null){
             return false;
         }
@@ -21,6 +21,11 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         if(this.items.length < this.itemsShow){
             return false;
         }
+
+        if(callback == undefined){
+            callback = function(){}
+        }
+
         $('#' + wrapperId).append('<div class="sjCarouselMain"></div>');
         $('.sjCarouselMain').append('<div id="sjBack" class="sjInactive"><<</div>');
         $('.sjCarouselMain').append('<div class="sjcWrapper"></div>');
@@ -53,13 +58,18 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             this.enableForward();
         }
 
+        callback();
         return true;
     }
 
     //add given element. if index not specified, append to the end
-    this.add = function(url, index){
+    this.add = function(url, index, callback){
         if(index == undefined || index > this.items.length){
             index = this.items.length;
+        }
+        else if(callback == undefined && index != undefined && typeof(index) == 'function'){
+            callback = index;
+            index = this.items.length;            
         }
         else{
             --index;
@@ -72,6 +82,10 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                 ++this.curFirst;//as indexes moved one forward
             }
         }
+        if(callback == undefined){
+            callback = function(){};
+        }
+
         this.items.splice(index, 0, url);
         if(index > 0){
             $('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
@@ -86,11 +100,16 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                     insertBefore('#li2');
             --this.curFirst;
         }
-        this.redraw(index);
+        this.checkSwitchers();
+        callback();
     }
 
     //remove given element
-    this.remove = function(index){
+    this.remove = function(index, callback){
+        if(callback == undefined){
+            callback = function(){}
+        }
+
         //removing last item
         if(index == this.items.length){
             this.back();
@@ -107,26 +126,31 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
             --this.curFirst;//as indexes moved one backward
         }
         
-        this.redraw(index + 1);
+        this.checkSwitchers();
+        callback();
     }
 
     //scroll the carousel s.t. given element will become visible
-    this.scroll = function(i){
+    this.scroll = function(i, callback){
         if((i >= this.curFirst && i<= (this.curFirst + this.itemsShow - 1)) || i > this.items.length) {
             return;
         }
         if(i < this.curFirst){
-            this.back(this.curFirst - i);
+            this.back(this.curFirst - i, callback);
         }
         else {//i > this.curFirst
-            this.forward(i - this.curFirst - 1);
+            this.forward(i - this.curFirst - 1, callback);
         }
     }
 
-    this.forward = function(numToScroll){
+    this.forward = function(numToScroll, callback){
         if(!this.forwardEnabled || this.curFirst + this.itemsScroll >= this.items.length){
             return;
         }
+        if(callback == undefined){
+            callback = function(){}
+        }
+
         //lock
         this.disableForward();
         this.disableBack();
@@ -147,15 +171,20 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                         var item = $('#li' + (self.curFirst - i)).remove();
                         self.el.append(item);
                     }
-                    self.redraw(self.curFirst);
+                    self.checkSwitchers();
+                    callback();
                 }}
          );      
     }
 
-    this.back = function(numToScroll){
+    this.back = function(numToScroll, callback){
         if(!this.backEnabled || this.curFirst <= 1){
             return;
         }
+        if(callback == undefined){
+            callback = function(){}
+        }
+
         //lock
         this.disableForward();
         this.disableBack();
@@ -176,20 +205,16 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                  duration: this.duration,
                  easing: this.easingType,
                  complete: function(){
-                     self.redraw(self.curFirst);
+                     self.checkSwitchers();
+                     callback();
                  }
                 }
          );
     }
 
-    this.redraw = function(start){
-        /*var end = start + this.itemsShow - 1;
-        for(var i = start; i < end; ++i){
-            this.items[i] = this.items[i+1];
-        }*/
-        
-        //enable/disable switchers, when needed
-        if(this.curFirst + this.itemsShow > this.items.length){
+    this.checkSwitchers = function(){
+        //alert(this.curFirst + ' + ' + this.itemsShow + ' > ' + (this.items.length + this.itemsScroll - 1));
+        if(this.curFirst + this.itemsShow > (this.items.length - this.itemsScroll + 1)){
             this.disableForward();
         }
         else{

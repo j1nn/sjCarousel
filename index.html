@@ -17,7 +17,7 @@
     <script type="text/javascript">
         var sjc;
         window.onload = function(){
-            sjc = new sjCarousel(1,2,50,50);
+            sjc = new sjCarousel(2,3,50,50);
             var imgs = new Array('img/1.jpg', 'img/2.jpg','img/3.jpg','img/4.jpg', 'img/5.jpg');
             var res = sjc.init(imgs, 'wrap');
             if(!res) {
@@ -40,6 +40,11 @@
         <span onclick="sjc.add('img/8.jpg',1)" class="testlink">add 8.jpg as 1st</span>
         <span onclick="sjc.remove(1)" class="testlink">remove 1st</span>
         <span onclick="sjc.remove(5)" class="testlink">remove 5th</span>
+
+        <br/><span>callbacks:</span><br/>
+        <span onclick="sjc.scroll(4,function(){alert('hi')})" class="testlink">scroll to 4th with callback</span>
+        <span onclick="sjc.add('img/9.jpg',function(){alert('9 added to end')})" class="testlink">add 9 as last</span>
+        <span onclick="sjc.remove(6,function(){alert('9 removed')})" class="testlink">remove 9</span>
       </p>
   </body>
 </html>
