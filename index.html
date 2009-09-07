@@ -35,8 +35,11 @@
         <span onclick="alert(sjc.itemAt(3))" class="testlink">item at 3</span>
         <span onclick="alert(sjc.getIndex('img/1.jpg'))" class="testlink">index of 1.jpg</span>
         <span onclick="alert(sjc.getIndex('img/5.jpg'))" class="testlink">index of 5.jpg</span>
-        <span onclick="sjc.add('img/6.jpg')" class="testlink">add 6.jpg as 6th</span>
+        <span onclick="sjc.add('img/6.jpg')" class="testlink">add 6.jpg as last</span>
         <span onclick="sjc.add('img/7.jpg',2)" class="testlink">add 7.jpg as 2nd</span>
+        <span onclick="sjc.add('img/8.jpg',1)" class="testlink">add 8.jpg as 1st</span>
+        <span onclick="sjc.remove(1)" class="testlink">remove 1st</span>
+        <span onclick="sjc.remove(5)" class="testlink">remove 5th</span>
       </p>
   </body>
 </html>

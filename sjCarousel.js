@@ -58,7 +58,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
 
     //add given element. if index not specified, append to the end
     this.add = function(url, index){
-        if(index == undefined){
+        if(index == undefined || index > this.items.length){
             index = this.items.length;
         }
         else{
@@ -68,24 +68,46 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                 $('#li' + i).attr('id', 'li' + (i + 1));
                 $('#i' + i).attr({'id':'i' + (i + 1),'alt':'i' + (i + 1)});
             }
-            ++this.curFirst;//as indexes moved one forward
+            if(index <= this.curFirst){
+                ++this.curFirst;//as indexes moved one forward
+            }
         }
         this.items.splice(index, 0, url);
-        $('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
+        if(index > 0){
+            $('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
                     '" alt="i' + (parseInt(index) + 1) + '" width="' + this.iw +
                     '" height="' + this.ih + '" id="i' + (parseInt(index) + 1) + '"/></div>').
                     insertAfter('#li' + index);
+        }
+        else{//adding 1st element
+            $('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
+                    '" alt="i' + (parseInt(index) + 1) + '" width="' + this.iw +
+                    '" height="' + this.ih + '" id="i' + (parseInt(index) + 1) + '"/></div>').
+                    insertBefore('#li2');
+            --this.curFirst;
+        }
         this.redraw(index);
     }
 
     //remove given element
-    this.remove = function(i){
-        ++i;
-        this.items.splice(i, 1);
-        //if this element is visible, redraw
-        if(i >= this.curFirst && i <= (this.curFirst + this.itemsShow)){
-            this.redraw(i);
+    this.remove = function(index){
+        //removing last item
+        if(index == this.items.length){
+            this.back();
         }
+        $('#li' + index).remove();
+        --index;
+        this.items.splice(index, 1);
+        //update ids
+        for(var i = this.items.length + 1; i > index + 1; --i){
+            $('#li' + i).attr('id', 'li' + (i - 1));
+            $('#i' + i).attr({'id':'i' + (i - 1),'alt':'i' + (i - 1)});
+        }
+        if(index <= this.curFirst && index != 0){
+            --this.curFirst;//as indexes moved one backward
+        }
+        
+        this.redraw(index + 1);
     }
 
     //scroll the carousel s.t. given element will become visible
