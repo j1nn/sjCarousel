@@ -6,8 +6,8 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.ih = h;
     this.el = null;
 
-    this.duration = 1300;
-    this.easingType = 'easeOutElastic';
+    this.duration = 300;
+    this.easingType = 'easeOutCirc';
 
     this.forwardEnabled = false;
     this.backEnabled = false;
