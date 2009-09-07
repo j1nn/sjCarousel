@@ -8,9 +8,6 @@
 .sjItem {
     float: left;
 }
-.sjCarousel img {
-    /*display: none;*/
-}
 .sjCarousel .visible {
     display: block;
 }
@@ -18,11 +15,10 @@
     cursor: pointer;
     clear: both;
     float: left;
+    margin-right: 10px;
 }
 #sjForward {
     cursor: pointer;
-    /*position: absolute;
-    left: 210px;*/
     float: left;
 }
 .sjActive {

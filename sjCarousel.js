@@ -29,9 +29,25 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         $('#' + wrapperId).append('<div class="sjCarouselMain"></div>');
         $('.sjCarouselMain').append('<div id="sjBack" class="sjInactive"><<</div>');
         $('.sjCarouselMain').append('<div class="sjcWrapper"></div>');
+
+        /*var addToMargin = 0;
+        if ($('#sjBack').css('margin-right') != ''){
+            addToMargin = parseInt($('#sjBack').css('margin-right'));
+        }
+        else if($('#sjBack').css('margin') != ''){
+            var parts = $('#sjBack').css('margin').split(' ');
+            if(parts.length > 1){
+                addToMargin = parseInt(parts[1]);
+            }
+            else{
+                addToMargin = parseInt(parts[0]);
+            }
+            alert(addToMargin)
+        }*/
+
         $('.sjcWrapper').css({'clip':'rect(0px,' + (this.iw * this.itemsShow + 1) + 'px,' + (this.ih + 1) + 'px,0px)',
-                            'margin-left' : $('#sjBack').width() + 'px'});
-        
+                    'margin-left' : ($('#sjBack').width() + parseInt($('#sjBack').css('margin-right')) +
+                    parseInt($('#sjBack').css('margin-left'))) + 'px'});
         $('.sjcWrapper').append('<div class="sjCarousel"></div>');
         $('.sjCarousel').css({'width':(this.iw * this.items.length + 10) + 'px',
                                 'height' : this.ih + 'px'
