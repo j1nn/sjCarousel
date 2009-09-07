@@ -61,21 +61,31 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         if(index == undefined){
             index = this.items.length;
         }
-        this.items[index] = url;
-        this.el.append('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
+        else{
+            --index;
+            //update ids
+            for(var i = this.items.length + 1; i >= index + 1; --i){
+                $('#li' + i).attr('id', 'li' + (i + 1));
+                $('#i' + i).attr({'id':'i' + (i + 1),'alt':'i' + (i + 1)});
+            }
+        }
+        this.items.splice(index, 0, url);
+        $('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
                     '" alt="i' + (parseInt(index) + 1) + '" width="' + this.iw +
-                    '" height="' + this.ih + '" id="i' + (parseInt(index) + 1) + '"/></div>');
+                    '" height="' + this.ih + '" id="i' + (parseInt(index) + 1) + '"/></div>').
+                    insertAfter('#li' + index);
+        this.redraw(index);
     }
 
     //remove given element
-    /*this.remove = function(i){
+    this.remove = function(i){
         ++i;
         this.items.splice(i, 1);
         //if this element is visible, redraw
         if(i >= this.curFirst && i <= (this.curFirst + this.itemsShow)){
-            this.redraw(i, false);
+            this.redraw(i);
         }
-    }*/
+    }
 
     //scroll the carousel s.t. given element will become visible
     this.scroll = function(i){
@@ -114,7 +124,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                         var item = $('#li' + (self.curFirst - i)).remove();
                         self.el.append(item);
                     }
-                    self.redraw(self.curFirst, true);
+                    self.redraw(self.curFirst);
                 }}
          );      
     }
@@ -143,17 +153,17 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                  duration: this.duration,
                  easing: this.easingType,
                  complete: function(){
-                     self.redraw(self.curFirst, true);
+                     self.redraw(self.curFirst);
                  }
                 }
          );
     }
 
-    this.redraw = function(start, effects){//todo: effects used?
-        var end = start + this.itemsShow - 1;
+    this.redraw = function(start){
+        /*var end = start + this.itemsShow - 1;
         for(var i = start; i < end; ++i){
             this.items[i] = this.items[i+1];
-        }
+        }*/
         
         //enable/disable switchers, when needed
         if(this.curFirst + this.itemsShow > this.items.length){
