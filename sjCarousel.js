@@ -68,6 +68,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
                 $('#li' + i).attr('id', 'li' + (i + 1));
                 $('#i' + i).attr({'id':'i' + (i + 1),'alt':'i' + (i + 1)});
             }
+            ++this.curFirst;//as indexes moved one forward
         }
         this.items.splice(index, 0, url);
         $('<div id="li' + (parseInt(index) + 1) + '" class="sjItem"><img src="' + url +
