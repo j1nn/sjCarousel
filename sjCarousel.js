@@ -2,8 +2,8 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.itemsScroll = itemsScroll;
     this.itemsShow = itemsShow;
     this.items = new Array();
-    this.iw = w;
-    this.ih = h;
+    this.iw = w + 1;
+    this.ih = h + 1;
     this.el = null;
 
     this.duration = 300;
@@ -12,7 +12,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     this.forwardEnabled = false;
     this.backEnabled = false;
 
-    this.init = function(items, wrapperId, callback) {
+    this.init = function(items, wrapperId, cyclic, callback) {
         if(this.itemsScroll <= 0 || this.itemsShow <= 0 || $('#' + wrapperId).html() == null){
             return false;
         }
@@ -25,6 +25,8 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         if(callback == undefined){
             callback = function(){}
         }
+
+        this.cyclic = cyclic;
 
         $('#' + wrapperId).append('<div class="sjCarouselMain"></div>');
         $('.sjCarouselMain').append('<div id="sjBack" class="sjInactive"><<</div>');
@@ -59,8 +61,11 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         $('#sjForward').click(function(){
             self.forward();
             });
-        if(this.items.length > this.itemsShow){
+        if(this.items.length > this.itemsShow || this.cyclic){
             this.enableForward();
+        }
+        if(this.cyclic){
+            this.enableBack();
         }
 
         callback();
@@ -149,8 +154,16 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     this.forward = function(numToScroll, callback){
-        if(!this.forwardEnabled || this.curFirst + this.itemsScroll >= this.items.length){
+        if(!this.forwardEnabled){
             return;
+        }
+        if(this.curFirst + this.itemsScroll >= this.items.length){
+            if(!this.cyclic){
+                return;
+            }
+            else if(this.curFirst > this.items.length){
+                this.curFirst = this.curFirst - this.items.length;
+            }
         }
         if(callback == undefined){
             callback = function(){}
@@ -183,8 +196,17 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     this.back = function(numToScroll, callback){
-        if(!this.backEnabled || this.curFirst <= 1){
+        if(!this.backEnabled){
             return;
+        }
+
+        if(this.curFirst <= 1){
+            if(!this.cyclic){
+                return;
+            }
+            else if(this.curFirst == 1){
+                this.curFirst = this.items.length + 1;
+            }
         }
         if(callback == undefined){
             callback = function(){}
@@ -218,7 +240,12 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
     }
 
     this.checkSwitchers = function(){
-        //alert(this.curFirst + ' + ' + this.itemsShow + ' > ' + (this.items.length + this.itemsScroll - 1));
+        if(this.cyclic){
+            this.enableForward();
+            this.enableBack();
+            return;
+        }
+
         if(this.curFirst + this.itemsShow > (this.items.length - this.itemsScroll + 1)){
             this.disableForward();
         }

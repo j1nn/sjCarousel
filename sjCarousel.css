@@ -8,6 +8,9 @@
 .sjItem {
     float: left;
 }
+.sjItem img {
+    border: 1px solid gray;
+}
 .sjCarousel .visible {
     display: block;
 }
