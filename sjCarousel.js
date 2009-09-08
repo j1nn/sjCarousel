@@ -33,7 +33,7 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         $('.sjCarouselMain').append('<div class="sjcWrapper"></div>');        
         $('.sjcWrapper').css({'clip':'rect(0px,' + 
                     (this.iw * this.itemsShow + this.itemsShow * Math.ceil(this.iw / 25) * 2 + 1) + 'px,'
-                    + (this.ih + 1) + 'px,0px)',
+                    + (this.ih + 4) + 'px,0px)',
                     'margin-left' : ($('#sjBack').width() + parseInt($('#sjBack').css('margin-right')) +
                     parseInt($('#sjBack').css('margin-left'))) + 'px'});
         $('.sjcWrapper').append('<div class="sjCarousel"></div>');
@@ -296,5 +296,3 @@ function sjCarousel(itemsScroll, itemsShow, w, h) {
         $('#sjBack').addClass('sjActive');        
     }
 }
-
-
